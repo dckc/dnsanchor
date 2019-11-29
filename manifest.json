@@ -1,15 +1,39 @@
 {
   "include": [
     "$(MODDABLE)/examples/manifest_base.json",
+    "$(MODDABLE)/modules/crypt/tls.json"
   ],
   "main": "bootstrap",
   "modules": {
     "main": "./bootstrap",
-    "./lib/*": [ "./lib/*" ],
-    "file": [
-      "$(MODULES)/files/file/*",
-      "$(MODULES)/files/file/lin/*",
-    ],
+    "./lib/*": [ "./lib/*" ]
+  },
+  "$comment": [
+    "cribbed from...",
+    "https://github.com/Moddable-OpenSource/moddable/blob/public/modules/files/file/manifest.json",
+    "https://github.com/Moddable-OpenSource/moddable/blob/public/examples/manifest_net.json"
+  ],
+  "platforms": {
+    "x-cli-lin": {
+      "modules": {
+	"*": [
+	  "$(MODULES)/files/file/lin/*",
+	  "$(MODULES)/network/socket/*",
+	  "$(MODULES)/network/socket/lin/*",
+	  "$(MODULES)/network/net/net",
+	  "$(MODULES)/network/net/lin/*"
+	]
+      },
+      "preload": [
+	"socket",
+	"net"
+      ],
+      "config": {
+	"file": {
+	  "root": "/tmp/"
+	}
+      }
+    }
   },
   "creation": {
     "keys": {

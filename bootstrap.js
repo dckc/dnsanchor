@@ -8,9 +8,12 @@ connectivity connections.
 /* global trace, Compartment */
 
 import { File, Iterator } from "file";
+// ISSUE: anything above kernel calls such as socket() should be in
+// pure modules.
+import { Request } from "http";
+import { SecureSocket } from "securesocket";
 
-import makeConsole from './lib/console';
-import { makePath } from './lib/pathlib';
+const harden = x => Object.freeze(x, true);
 
 export default async function main() {
   const console = makeConsole(trace);
@@ -22,10 +25,17 @@ export default async function main() {
     ([specifier, _]) => specifier.startsWith('lib/')));
 
   const confined = new Compartment('lib/dnsanchor', {}, libModMap);
-  const { run } = confined.export;
+  const { run, makePath, httpsPath, httpsConstruct } = confined.export;
 
   const cwd = makePath('.', { File, Iterator });
+  const makeRequest = httpsConstruct({ Request, SecureSocket });
+  const web = harden({
+    https(host, port) {
+      console.log('web.https:', host, port);
+      return httpsPath(host, port, { makeRequest });
+    }
+  });
   console.log('run()...');
-  return run(cwd, { console });
+  return run(cwd, web, { console });
 }
 
