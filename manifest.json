@@ -1,0 +1,16 @@
+{
+  "include": [
+    "$(MODDABLE)/examples/manifest_base.json",
+  ],
+  "main": "bootstrap",
+  "modules": {
+    "main": "./bootstrap",
+    "*": [ "./lib/*" ],
+  },
+  "creation": {
+    "keys": {
+      "available": 4096
+    },
+    "stack": 4096
+  }
+}
