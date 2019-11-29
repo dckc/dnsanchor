@@ -14,6 +14,9 @@ $(MODDABLE)/build/bin/lin/release/$(PKG): bootstrap.js lib/*.js
 run: build
 	$(MODDABLE)/build/bin/lin/release/$(PKG)
 
+check:
+	jq . manifest.json
+
 clean:
 	rm -rf $(MODDABLE)/build/tmp/lin/release/$(PKG)
 	rm -rf $(MODDABLE)/build/bin/lin/release/$(PKG)
