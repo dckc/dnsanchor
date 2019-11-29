@@ -7,8 +7,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "esm": "^3.2.25",
-    "nfsn-client": "0.0.1"
+    "esm": "^3.2.25"
   },
   "devDependencies": {},
   "scripts": {
