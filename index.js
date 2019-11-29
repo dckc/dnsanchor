@@ -16,7 +16,6 @@ function testAuth(crypto, sha1hex) {
 }
 
 async function main({ fsp, path, NfsnClient, https, crypto, clock }) {
-  console.log('main');
   const sha1hex = txt => crypto.createHash('sha1').update(txt).digest('hex');
 
   testAuth(crypto, sha1hex);
@@ -28,15 +27,14 @@ async function main({ fsp, path, NfsnClient, https, crypto, clock }) {
   });
 
   const ip = await currentIP(web);
-  console.log({ ip });
+  console.log('@@currentIP', { ip });
 
   const config = await readData(cwd.join('config.json'));
 
   const client = new NfsnClient({ login: config.login, apiKey: config.API_KEY });
 
-  console.log('listRRs');
   const resp = await asPromise(cb => client.dns.listRRs(config.domain, {type: 'A'}, cb));
-  console.log(JSON.stringify(resp, undefined, 2));
+  console.log('listRRs:', JSON.stringify(resp, undefined, 2));
 
   const randomBytesHex = qty => crypto.randomBytes(qty).toString('hex');
   const ep = nfsnEndPoint(config.login, config.API_KEY, { web, clock, randomBytesHex, sha1hex });
@@ -56,7 +54,6 @@ if (typeof require !== 'undefined' && typeof module !== 'undefined') {
   })
     .then(_ => process.exit(0))
     .catch(oops => {
-      console.log('ERROR!');
       console.error(oops);
       process.exit(1);
     });
