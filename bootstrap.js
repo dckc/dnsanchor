@@ -7,19 +7,25 @@ connectivity connections.
 */
 /* global trace, Compartment */
 
-import makeConsole from './console';
+import { File, Iterator } from "file";
 
-export default function main() {
+import makeConsole from './lib/console';
+import { makePath } from './lib/pathlib';
+
+export default async function main() {
   const console = makeConsole(trace);
+  console.log('bootstrap main()...');
 
   /* From the module map of this primal compartment, extract the
      (pure) library modules for use in a confied compartment. */
-  const { dnsanchor } = Compartment.map;
-  const pureModuleMap = { dnsanchor };
+  const libModMap = Object.fromEntries(Object.entries(Compartment.map).filter(
+    ([specifier, _]) => specifier.startsWith('lib/')));
 
-  const confined = new Compartment('dnsanchor', {}, pureModuleMap);
+  const confined = new Compartment('lib/dnsanchor', {}, libModMap);
   const { run } = confined.export;
-  
-  run({ console });
+
+  const cwd = makePath('.', { File, Iterator });
+  console.log('run()...');
+  return run(cwd, { console });
 }
 

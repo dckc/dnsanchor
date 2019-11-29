@@ -5,7 +5,11 @@
   "main": "bootstrap",
   "modules": {
     "main": "./bootstrap",
-    "*": [ "./lib/*" ],
+    "./lib/*": [ "./lib/*" ],
+    "file": [
+      "$(MODULES)/files/file/*",
+      "$(MODULES)/files/file/lin/*",
+    ],
   },
   "creation": {
     "keys": {
