@@ -1,0 +1,20 @@
+{
+  "name": "dnsanchor",
+  "version": "0.1.0",
+  "description": "dynamic dns client for NearlyFreeSpeech.net",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "esm": "^3.2.25",
+    "nfsn-client": "0.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node -r esm index.js ; echo $?",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dan Connolly",
+  "license": "MIT"
+}
