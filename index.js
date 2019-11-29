@@ -2,22 +2,10 @@ import url from 'url';
 
 import { readData, currentIP, auth, nfsnEndPoint } from './lib/dnsanchor';
 import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
+import asPromise from './lib/aspromise';
 
 const harden = x => Object.freeze(x);
 
-
-function asPromise(calling) {
-  return new Promise((resolve, reject) => {
-    function cb(err, result) {
-      if (err) {
-	reject(err);
-      } else {
-	resolve(result);
-      }
-    }
-    calling(cb);
-  });
-}
 
 function testAuth(crypto, sha1hex) {
   const example = 'testuser;1012121212;dkwo28Sile4jdXkw;p3kxmRKf9dk3l6ls;/site/example/getInfo;da39a3ee5e6b4b0d3255bfef95601890afd80709';
