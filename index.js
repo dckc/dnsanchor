@@ -1,38 +1,54 @@
-import NfsnClient from 'nfsn-client';
-import { promises as fsp } from 'fs';
+import url from 'url';
+
+import { readData, currentIP } from './lib/dnsanchor';
+import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
+
+const harden = x => Object.freeze(x);
+
 
 function asPromise(calling) {
   return new Promise((resolve, reject) => {
     function cb(err, result) {
-      console.log('cb', calling);
       if (err) {
 	reject(err);
       } else {
 	resolve(result);
       }
     }
-    console.log('calling', calling);
     calling(cb);
   });
 }
 
-async function main(process) {
+async function main({ fsp, path, NfsnClient, https }) {
   console.log('main');
-  const configTxt = await fsp.readFile('config.json');
-  console.log('readFile done');
-  const apiKey = JSON.parse(configTxt).API_KEY;
-  const login = process.env['LOGNAME'];
 
-  const client = new NfsnClient({ login, apiKey });
+  const cwd = makeNodePath('.', { fsp, path });
+  const web = harden({
+    https: (host, port) => makeNodeHttpPath(`https://${host}:${port}/`,
+					    { get: https.get, resolve: url.resolve }),
+  });
+
+
+  const ip = await currentIP(web);
+  console.log({ ip });
+
+  const config = await readData(cwd.join('config.json'));
+
+  const client = new NfsnClient({ login: config.login, apiKey: config.API_KEY });
 
   console.log('listRRs');
-  const resp = await asPromise(cb => client.dns.listRRs('madmode.com', {type: 'MX'}, cb));
+  const resp = await asPromise(cb => client.dns.listRRs(config.domain, {type: 'A'}, cb));
   console.log(JSON.stringify(resp, undefined, 2));
 }
 
 /* global process, require, module */
 if (typeof require !== 'undefined' && typeof module !== 'undefined') {
-  main(process)
+  main({
+    fsp: require('fs').promises,
+    path: require('path'),
+    https: require('https'),
+    NfsnClient: require('nfsn-client'),
+  })
     .then(_ => process.exit(0))
     .catch(oops => {
       console.log('ERROR!');
