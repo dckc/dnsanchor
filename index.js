@@ -1,6 +1,6 @@
 import url from 'url';
 
-import { readData, currentIP } from './lib/dnsanchor';
+import { readData, currentIP, auth } from './lib/dnsanchor';
 import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
 
 const harden = x => Object.freeze(x);
@@ -19,8 +19,20 @@ function asPromise(calling) {
   });
 }
 
-async function main({ fsp, path, NfsnClient, https }) {
+function testAuth(crypto) {
+  const example = 'testuser;1012121212;dkwo28Sile4jdXkw;p3kxmRKf9dk3l6ls;/site/example/getInfo;da39a3ee5e6b4b0d3255bfef95601890afd80709';
+  const expected = 'testuser;1012121212;dkwo28Sile4jdXkw;0fa8932e122d56e2f6d1550f9aab39c4aef8bfc4';
+  const [login, timestamp, salt, apiKey, url, bodyHash] = example.split(';');
+  const sha1hex = txt => crypto.createHash('sha1').update(txt).digest('hex');
+  const actual = auth(url, '', { login, apiKey }, { timestamp, salt }, sha1hex);
+  console.log({actual, expected, OK: actual === expected});
+}
+
+async function main({ fsp, path, NfsnClient, https, crypto }) {
   console.log('main');
+  const sha1hex = txt => crypto.createHash('sha1').update(txt).digest('hex');
+
+  testAuth(crypto);
 
   const cwd = makeNodePath('.', { fsp, path });
   const web = harden({
@@ -47,6 +59,7 @@ if (typeof require !== 'undefined' && typeof module !== 'undefined') {
     fsp: require('fs').promises,
     path: require('path'),
     https: require('https'),
+    crypto: require('crypto'),
     NfsnClient: require('nfsn-client'),
   })
     .then(_ => process.exit(0))
