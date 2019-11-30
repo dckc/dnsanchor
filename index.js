@@ -1,6 +1,7 @@
 import url from 'url';
 
-import { readData, currentIP, auth, nfsnEndPoint } from './lib/dnsanchor';
+import { readData, ipAddressService, auth,
+	 nfsnEndPoint, ensureCurrent } from './lib/dnsanchor';
 import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
 import asPromise from './lib/aspromise';
 
@@ -17,24 +18,23 @@ function testAuth(crypto, sha1hex) {
 
 async function main({ fsp, path, https, crypto, clock }) {
   const sha1hex = txt => crypto.createHash('sha1').update(txt).digest('hex');
+  const randomBytesHex = qty => crypto.randomBytes(qty).toString('hex');
 
-  testAuth(crypto, sha1hex);
+  // testAuth(crypto, sha1hex);
 
   const cwd = makeNodePath('.', { fsp, path });
   const web = harden({
     https: (host, port) => makeNodeHttpPath(`https://${host}:${port}/`, {},
 					    { request: https.request, resolve: url.resolve }),
   });
-
-  const ip = await currentIP(web);
-  console.log('@@currentIP', { ip });
-
   const config = await readData(cwd.join('config.json'));
 
-  const randomBytesHex = qty => crypto.randomBytes(qty).toString('hex');
-  const ep = nfsnEndPoint(config.login, config.API_KEY, { web, clock, randomBytesHex, sha1hex });
-  const info = await ep.listRRs(config.domain, {}); // , { type: 'A' }
-  console.log('@@listRRs', info);
+  const ip = await web.https(ipAddressService, 443).readFile();
+
+  const domain = nfsnEndPoint(config.login, config.API_KEY,
+			      { web, clock, randomBytesHex, sha1hex })
+	.domain(config.domain);
+  await ensureCurrent(ip, domain, config.host);
 }
 
 /* global process, require, module */
