@@ -7,11 +7,13 @@ connectivity connections.
 */
 /* global trace, Compartment */
 
-import { File, Iterator } from "file";
+import { File, Iterator } from 'file'; // eslint-disable-line import/no-unresolved
 // ISSUE: anything above kernel calls such as socket() should be in
 // pure modules.
-import { Request } from "http";
-import { SecureSocket } from "securesocket";
+import { Request } from 'http';
+import { SecureSocket } from 'securesocket'; // eslint-disable-line import/no-unresolved
+
+import makeConsole from './lib/console';
 
 const harden = x => Object.freeze(x, true);
 
@@ -21,8 +23,11 @@ export default async function main() {
 
   /* From the module map of this primal compartment, extract the
      (pure) library modules for use in a confied compartment. */
-  const libModMap = Object.fromEntries(Object.entries(Compartment.map).filter(
-    ([specifier, _]) => specifier.startsWith('lib/')));
+  const libModMap = Object.fromEntries(
+    Object.entries(Compartment.map).filter(([specifier, _]) =>
+      specifier.startsWith('lib/'),
+    ),
+  );
 
   const confined = new Compartment('lib/dnsanchor', {}, libModMap);
   const { run, makePath, httpsPath, httpsConstruct } = confined.export;
@@ -33,9 +38,8 @@ export default async function main() {
     https(host, port) {
       console.log('web.https:', host, port);
       return httpsPath(host, port, { makeRequest });
-    }
+    },
   });
   console.log('run()...');
   return run(cwd, web, { console });
 }
-

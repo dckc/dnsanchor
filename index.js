@@ -1,40 +1,58 @@
 import url from 'url';
 
-import { readData, ipAddressService, auth,
-	 nfsnEndPoint, ensureCurrent } from './lib/dnsanchor';
+import {
+  readData,
+  ipAddressService,
+  nfsnEndPoint,
+  ensureCurrent,
+} from './lib/dnsanchor';
 import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
-import asPromise from './lib/aspromise';
 
 const harden = x => Object.freeze(x);
 
-
 async function main({ fsp, path, https, crypto, clock }) {
-  const sha1hex = txt => crypto.createHash('sha1').update(txt).digest('hex');
+  const sha1hex = txt =>
+    crypto
+      .createHash('sha1')
+      .update(txt)
+      .digest('hex');
   const randomBytesHex = qty => crypto.randomBytes(qty).toString('hex');
 
   // auth.test(crypto, sha1hex);
 
   const web = harden({
-    https: (host, port) => makeNodeHttpPath(`https://${host}:${port}/`, {},
-					    { request: https.request, resolve: url.resolve }),
+    https: (host, port) =>
+      makeNodeHttpPath(
+        `https://${host}:${port}/`,
+        {},
+        { request: https.request, resolve: url.resolve },
+      ),
   });
   const ip = await web.https(ipAddressService, 443).readFile();
 
   const cwd = makeNodePath('.', { fsp, path });
   const config = await readData(cwd.join('config.json'));
-  const domain = nfsnEndPoint(config.login, config.API_KEY,
-			      { web, clock, randomBytesHex, sha1hex })
-	.domain(config.domain);
+  const domain = nfsnEndPoint(config.login, config.API_KEY, {
+    web,
+    clock,
+    randomBytesHex,
+    sha1hex,
+  }).domain(config.domain);
 
   await ensureCurrent(ip, domain, config.host);
 }
 
+// eslint-disable-next-line no-redeclare
 /* global process, require, module */
 if (typeof require !== 'undefined' && typeof module !== 'undefined') {
   main({
+    // eslint-disable-next-line global-require
     fsp: require('fs').promises,
+    // eslint-disable-next-line global-require
     path: require('path'),
+    // eslint-disable-next-line global-require
     https: require('https'),
+    // eslint-disable-next-line global-require
     crypto: require('crypto'),
     clock: () => Date.now(),
   })
