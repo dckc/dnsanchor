@@ -11,7 +11,7 @@ import { File, Iterator } from 'file'; // eslint-disable-line import/no-unresolv
 // ISSUE: anything above kernel calls such as socket() should be in
 // pure modules.
 import { Request } from 'http';
-import { SecureSocket } from 'securesocket'; // eslint-disable-line import/no-unresolved
+import SecureSocket from 'securesocket'; // eslint-disable-line import/no-unresolved
 
 import makeConsole from './lib/console';
 
