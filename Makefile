@@ -7,7 +7,7 @@ PKG=dnsanchor
 
 build: $(MODDABLE)/build/bin/lin/release/$(PKG)
 
-$(MODDABLE)/build/bin/lin/release/$(PKG): bootstrap.js lib/*.js
+$(MODDABLE)/build/bin/lin/release/$(PKG): bootstrap.js lib/*.js manifest.json
 	mcconfig -p x-cli-lin
 	cd $(MODDABLE)/build/tmp/lin/release/$(PKG) && $(MAKE)
 
