@@ -5,9 +5,11 @@
   ],
   "main": "bootstrap",
   "modules": {
+    "http": [ "$(MODULES)/network/http/*" ],
     "main": "./bootstrap",
     "./lib/*": [ "./lib/*" ]
   },
+  "preload": [ "main" ],
   "$comment": [
     "cribbed from...",
     "https://github.com/Moddable-OpenSource/moddable/blob/public/modules/files/file/manifest.json",
@@ -17,10 +19,11 @@
     "x-cli-lin": {
       "modules": {
 	"*": [
+	  "$(MODULES)/files/file/*",
 	  "$(MODULES)/files/file/lin/*",
 	  "$(MODULES)/network/socket/*",
 	  "$(MODULES)/network/socket/lin/*",
-	  "$(MODULES)/network/net/net",
+	  "$(MODULES)/network/net/*",
 	  "$(MODULES)/network/net/lin/*"
 	]
       },
