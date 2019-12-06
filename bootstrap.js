@@ -29,7 +29,7 @@ export default async function main() {
     ),
   );
 
-  const confined = new Compartment('lib/dnsanchor', {}, libModMap);
+  const confined = new Compartment('lib/dnsanchor', { console }, libModMap);
   const { run, makePath, httpsPath, httpsConstruct } = confined.export;
 
   const cwd = makePath('.', { File, Iterator });
@@ -37,7 +37,7 @@ export default async function main() {
   const web = harden({
     https(host, port) {
       console.log('web.https:', host, port);
-      return httpsPath(host, port, { makeRequest });
+      return httpsPath(host, port, '/', { makeRequest });
     },
   });
   console.log('run()...');
