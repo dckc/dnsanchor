@@ -36,6 +36,27 @@
 	  "root": "/tmp/"
 	}
       }
+    },
+    "lin": {
+      "modules": {
+	"*": [
+	  "$(MODULES)/files/file/*",
+	  "$(MODULES)/files/file/lin/*",
+	  "$(MODULES)/network/socket/*",
+	  "$(MODULES)/network/socket/lin/*",
+	  "$(MODULES)/network/net/*",
+	  "$(MODULES)/network/net/lin/*"
+	]
+      },
+      "preload": [
+	"socket",
+	"net"
+      ],
+      "config": {
+	"file": {
+	  "root": "/tmp/"
+	}
+      }
     }
   },
   "creation": {

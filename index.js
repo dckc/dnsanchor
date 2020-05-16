@@ -5,6 +5,7 @@ import {
   ipAddressService,
   nfsnEndPoint,
   ensureCurrent,
+  auth,
 } from './lib/dnsanchor';
 import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
 
@@ -18,7 +19,7 @@ async function main({ fsp, path, https, crypto, clock }) {
       .digest('hex');
   const randomBytesHex = qty => crypto.randomBytes(qty).toString('hex');
 
-  // auth.test(crypto, sha1hex);
+  auth.test(sha1hex);
 
   const web = harden({
     https: (host, port) =>

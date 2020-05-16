@@ -5,19 +5,28 @@ PKG=dnsanchor
 
 .PHONY: build run
 
-build: $(MODDABLE)/build/bin/lin/release/$(PKG)
+build: ./build/bin/lin/release/$(PKG)
 
-$(MODDABLE)/build/bin/lin/release/$(PKG): bootstrap.js lib/*.js manifest.json
-	mcconfig -p x-cli-lin
-	cd $(MODDABLE)/build/tmp/lin/release/$(PKG) && $(MAKE)
+./build/bin/lin/release/$(PKG): bootstrap.js lib/*.js manifest.json \
+		$(MODDABLE)/xs/platforms/lin_xs_cli.c \
+		$(MODDABLE)/modules/network/socket/lin/modSocket.c
+	mkdir -p ./build
+	mcconfig -o ./build -p x-cli-lin -m
+
+debug_sim: bootstrap.js lib/*.js manifest.json $(MODDABLE)/xs/platforms/lin_xs_cli.c
+	mkdir -p ./build
+	mcconfig -o ./build -d -m
+
+debug: bootstrap.js lib/*.js manifest.json $(MODDABLE)/xs/platforms/lin_xs_cli.c
+	mkdir -p ./build
+	mcconfig -o ./build -p x-cli-lin -d -m
 
 run: build
-	$(MODDABLE)/build/bin/lin/release/$(PKG)
+	./build/bin/lin/release/$(PKG)
 
 check:
 	jq . manifest.json
 
 clean:
-	rm -rf $(MODDABLE)/build/tmp/lin/release/$(PKG)
-	rm -rf $(MODDABLE)/build/bin/lin/release/$(PKG)
+	rm -rf ./build
 
