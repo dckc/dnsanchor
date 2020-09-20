@@ -1,3 +1,4 @@
+// @ts-check
 import url from 'url';
 
 import {
@@ -9,19 +10,34 @@ import {
 } from './lib/dnsanchor';
 import { makeNodePath, makeNodeHttpPath } from './lib/pathlib';
 
-const harden = x => Object.freeze(x);
+const { freeze } = Object;
 
+/**
+ * @param {{
+ *  fsp: typeof import('fs').promises,
+ *  path: typeof import('path'),
+ *  https: typeof import('https'),
+ *  crypto: typeof import('crypto'),
+ *  clock: () => number,
+ * }} io
+ *
+ * @typedef { import('./lib/pathlib').Path } Path
+ * @typedef { import('./lib/pathlib').WebPath } WebPath
+ */
 async function main({ fsp, path, https, crypto, clock }) {
+  /** @type { (txt: string) => string } */
   const sha1hex = txt =>
     crypto
       .createHash('sha1')
       .update(txt)
       .digest('hex');
+  /** @type { (qty: number) => string } */
   const randomBytesHex = qty => crypto.randomBytes(qty).toString('hex');
 
   auth.test(sha1hex);
 
-  const web = harden({
+  const web = freeze({
+    /** @type { (host: string, port: number) => Path & WebPath } */
     https: (host, port) =>
       makeNodeHttpPath(
         `https://${host}:${port}/`,

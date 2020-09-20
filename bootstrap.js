@@ -11,7 +11,7 @@ import { File, Iterator } from 'file'; // eslint-disable-line import/no-unresolv
 // ISSUE: anything above kernel calls such as socket() should be in
 // pure modules.
 import { Request } from 'http';
-import { Digest } from 'crypt';
+import { Digest } from 'crypt'; // eslint-disable-line import/no-unresolved
 import SecureSocket from 'securesocket'; // eslint-disable-line import/no-unresolved
 
 import makeConsole from './lib/console';
@@ -24,20 +24,26 @@ function randomBytesHex(qty) {
   if (qty !== 8) {
     throw new Error('not supported');
   }
-  const abs = x => x < 0 ? -x : x;
-  const hex = (x, w) => abs(x|0).toString(16).toLowerCase().padStart(w, '0');
+  const abs = x => (x < 0 ? -x : x);
+  const hex = (x, w) =>
+    abs(x | 0) // eslint-disable-line no-bitwise
+      .toString(16)
+      .toLowerCase()
+      .padStart(w, '0');
   const a = hex(Math.random() * 4294967295, 8);
   const b = hex(Math.random() * 4294967295, 8);
   return a + b;
 }
 
 function sha1hex(txt) {
-  let sha1 = new Digest("SHA1");
+  const sha1 = new Digest('SHA1');
   sha1.write(txt);
 
   // https://stackoverflow.com/a/40031979/7963
   function buf2hex(buffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+    return Array.prototype.map
+      .call(new Uint8Array(buffer), x => `00${x.toString(16)}`.slice(-2))
+      .join('');
   }
 
   return buf2hex(sha1.close()).toLowerCase();
@@ -55,7 +61,10 @@ export default async function main() {
     const { run, makePath, httpsPath, httpsConstruct, auth } = modNS;
     console.log('@@got exports...');
 
-    const cwd = makePath('/home/connolly/projects/dnsanchor', { File, Iterator }); //@@
+    const cwd = makePath('/home/connolly/projects/dnsanchor', {
+      File,
+      Iterator,
+    }); //@@
     const makeRequest = httpsConstruct({ Request, SecureSocket });
     const web = harden({
       https(host, port) {
