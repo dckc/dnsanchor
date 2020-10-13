@@ -48,6 +48,14 @@
 	  "$(MODULES)/network/net/lin/*"
 	]
       },
+      "resources": {
+        "*": [
+          "$(MODULES)/crypt/data/ca106",
+          "$(MODULES)/crypt/data/ca107",
+          "$(MODULES)/crypt/data/ca109",
+          "$(MODULES)/crypt/data/ca175"
+        ]
+      },
       "preload": [
 	"socket",
 	"net"
