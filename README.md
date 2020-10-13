@@ -84,3 +84,42 @@ make[1]: Entering directory '.../moddable/build/tmp/lin/release/dnsanchor'
 # cc dnsanchor
 make[1]: Leaving directory '.../moddable/build/tmp/lin/release/dnsanchor'
 ```
+
+## Integration Test Passed on XS
+
+```
+bootstrap main()...
+@@go...
+@@got compartment...
+@@got exports...
+run()...
+Hello, world!
+API key length: 16
+web.https: api.ipify.org 443
+@@httpsPath https://api.ipify.org:443/ {}
+@@readFile makeRequest {"host":"api.ipify.org","port":443,"method":"GET","path":"/","headers":{},"body":false}
+IP address: 169.147.3.26
+web.https: api.nearlyfreespeech.net 443
+@@httpsPath https://api.nearlyfreespeech.net:443/ {}
+@@httpsPath https://api.nearlyfreespeech.net:443/dns/madmode.com/listRRs {}
+@@httpsPath https://api.nearlyfreespeech.net:443/dns/madmode.com/listRRs {"X-NFSN-Authentication":"connolly;1602611772;5d41ff08485f3a7c;41e1b412d8f22ee4d0ff39e294b2ede969148196","Content-Type":"application/x-www-form-urlencoded"}
+@@readFile makeRequest {"host":"api.nearlyfreespeech.net","port":443,"method":"POST","path":"/dns/madmode.com/listRRs","headers":{"X-NFSN-Authentication":"connolly;1602611772;5d41ff08485f3a7c;41e1b412d8f22ee4d0ff39e294b2ede969148196","Content-Type":"application/x-www-form-urlencoded","content-length":"20"},"body":"name=capnhook&type=A"}
+@@sendRequest cb 1 200 undefined
+@@sendRequest cb 5 [{"name":"capnhook","type":"A","data":"136.33.249.0","ttl":3600,"scope":"member"}] undefined
+{"action":"add","name":"capnhook","type":"A","data":"169.147.3.26"}
+{"action":"remove","addrs":[{"name":"capnhook","type":"A","data":"136.33.249.0","ttl":3600,"scope":"member"}]}
+web.https: api.nearlyfreespeech.net 443
+@@httpsPath https://api.nearlyfreespeech.net:443/ {}
+@@httpsPath https://api.nearlyfreespeech.net:443/dns/madmode.com/addRR {}
+@@httpsPath https://api.nearlyfreespeech.net:443/dns/madmode.com/addRR {"X-NFSN-Authentication":"connolly;1602611773;244010a8649db010;c7351ca9b200df2f7c6190a16df45cdab0ffea7c","Content-Type":"application/x-www-form-urlencoded"}
+@@readFile makeRequest {"host":"api.nearlyfreespeech.net","port":443,"method":"POST","path":"/dns/madmode.com/addRR","headers":{"X-NFSN-Authentication":"connolly;1602611773;244010a8649db010;c7351ca9b200df2f7c6190a16df45cdab0ffea7c","Content-Type":"application/x-www-form-urlencoded","content-length":"38"},"body":"name=capnhook&type=A&data=169.147.3.26"}
+
+web.https: api.nearlyfreespeech.net 443
+@@httpsPath https://api.nearlyfreespeech.net:443/ {}
+@@httpsPath https://api.nearlyfreespeech.net:443/dns/madmode.com/removeRR {}
+@@httpsPath https://api.nearlyfreespeech.net:443/dns/madmode.com/removeRR {"X-NFSN-Authentication":"connolly;1602611773;042c46363e2dd3d0;310a2098b2f158752b1b6dd80a9f8515ecb9bc2f","Content-Type":"application/x-www-form-urlencoded"}
+@@readFile makeRequest {"host":"api.nearlyfreespeech.net","port":443,"method":"POST","path":"/dns/madmode.com/removeRR","headers":{"X-NFSN-Authentication":"connolly;1602611773;042c46363e2dd3d0;310a2098b2f158752b1b6dd80a9f8515ecb9bc2f","Content-Type":"application/x-www-form-urlencoded","content-length":"38"},"body":"name=capnhook&type=A&data=136.33.249.0"}
+@@sendRequest cb 1 200 undefined
+@@sendRequest cb 5  undefined
+@@ran
+```
