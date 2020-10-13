@@ -9,7 +9,7 @@
     "main": "./bootstrap",
     "./lib/*": [ "./lib/*" ]
   },
-  "preload": [ "main" ],
+  "preload": [],
   "$comment": [
     "cribbed from...",
     "https://github.com/Moddable-OpenSource/moddable/blob/public/modules/files/file/manifest.json",
