@@ -58,14 +58,29 @@ export default async function main() {
     const c1 = new Compartment({ console });
     console.log('@@got compartment...');
     const modNS = await c1.import('lib/dnsanchor');
-    const { run, makePath, httpsPath, httpsConstruct, auth } = modNS;
+    const { run, makePath, httpsPath, auth } = modNS;
     console.log('@@got exports...');
 
     const cwd = makePath('/home/connolly/projects/dnsanchor', {
       File,
       Iterator,
     }); //@@
-    const makeRequest = httpsConstruct({ Request, SecureSocket });
+
+    const makeRequest = (opts, cb) => {
+      const req = new Request({
+        Socket: SecureSocket,
+        secure: {
+          // trace clue May 12
+          // https://github.com/Moddable-OpenSource/moddable/issues/358#issuecomment-627127570
+          //  trace: true,
+          protocolVersion: 0x303,
+        },
+        ...opts,
+      });
+      req.callback = cb;
+      return req;
+    };
+
     const web = freeze({
       https(host, port) {
         console.log('web.https:', host, port);
