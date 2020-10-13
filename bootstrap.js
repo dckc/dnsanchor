@@ -69,7 +69,7 @@ export default async function main() {
     const web = freeze({
       https(host, port) {
         console.log('web.https:', host, port);
-        return httpsPath(host, port, '/', { host }, { makeRequest });
+        return httpsPath(host, port, '/', {}, { makeRequest });
       },
     });
     console.log('run()...');
