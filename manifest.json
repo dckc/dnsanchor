@@ -20,6 +20,8 @@
     "x-cli-lin": {
       "modules": {
 	"*": [
+    "$(MODULES)/base/timer/timer",
+  	"$(MODULES)/base/timer/lin/*",
 	  "$(MODULES)/files/file/*",
 	  "$(MODULES)/files/file/lin/*",
 	  "$(MODULES)/network/socket/*",
@@ -49,14 +51,6 @@
 	  "$(MODULES)/network/net/lin/*"
 	]
       },
-      "resources": {
-        "*": [
-          "$(MODULES)/crypt/data/ca106",
-          "$(MODULES)/crypt/data/ca107",
-          "$(MODULES)/crypt/data/ca109",
-          "$(MODULES)/crypt/data/ca175"
-        ]
-      },
       "preload": [
 	"socket",
 	"net"
@@ -68,13 +62,15 @@
       }
     }
   },
-  "config": {
-		"tls": {
-			"DHE_RSA": true,
-			"ECDHE_RSA": true
-		}
-	},
-  "creation": {
+  "resources": {
+    "*": [
+      "$(MODULES)/crypt/data/ca106",
+      "$(MODULES)/crypt/data/ca107",
+      "$(MODULES)/crypt/data/ca109",
+      "$(MODULES)/crypt/data/ca175"
+    ]
+  },
+"creation": {
     "keys": {
       "available": 4096
     },
