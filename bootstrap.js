@@ -16,9 +16,9 @@ import SecureSocket from 'securesocket'; // eslint-disable-line import/no-unreso
 
 import makeConsole from './lib/console';
 
-const harden = x => Object.freeze(x, true);
+const { freeze } = Object;
 
-const clock = harden(() => Date.now());
+const clock = freeze(() => Date.now());
 
 function randomBytesHex(qty) {
   if (qty !== 8) {
@@ -66,7 +66,7 @@ export default async function main() {
       Iterator,
     }); //@@
     const makeRequest = httpsConstruct({ Request, SecureSocket });
-    const web = harden({
+    const web = freeze({
       https(host, port) {
         console.log('web.https:', host, port);
         return httpsPath(host, port, '/', { host }, { makeRequest });
