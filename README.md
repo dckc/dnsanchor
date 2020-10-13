@@ -1,18 +1,16 @@
 # dnsanchor - a Dynamic DNS anchor
 
 **dnsanchor** is a dynamic DNS client for
-[NearlyFreeSpeech.net][NFSN] much like [nfsn-pingbot][], built
+[NearlyFreeSpeech.net][nfsn] much like [nfsn-pingbot][], built
 with JavaScript using object capability ([ocap][])
 security techniques.
 
-_It's *intended* to run on the [xs][] platform, but [I can't get
-sockets to work][298]._
+_It's *intended* to run on the [xs][] platform, though it's
+lightly tested and depends on an [agoric-specific branch][2]._
 
 [nfsn-pingbot]: https://github.com/joshkunz/nfsn-pingbot
-[NFSN]: https://www.nearlyfreespeech.net/
+[nfsn]: https://www.nearlyfreespeech.net/
 [ocap]: https://en.wikipedia.org/wiki/Object-capability_model
-[298]: https://github.com/Moddable-OpenSource/moddable/issues/298
-
 
 ## Configuration and node.js Usage
 
@@ -53,7 +51,6 @@ npm start
 
 [3]: https://members.nearlyfreespeech.net/wiki/API/Introduction
 
-
 ## xs: Tiny, Modern JavaScript Runtime (WIP)
 
 The [Moddable XS SDK][xs] is designed to run JS in microcontrollers. It
@@ -63,14 +60,12 @@ executable.
 
 [xs]: https://github.com/Moddable-OpenSource/moddable
 
-
 ### Build from source
 
 The `x-cli-lin` platform is a custom [ag-linux-cli][2] branch. Only
 linux is supported (patches welcome!).
 
 [2]: https://github.com/dckc/moddable/tree/ag-linux-cli
-
 
 ```
 $ make
