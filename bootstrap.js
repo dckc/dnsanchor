@@ -81,7 +81,7 @@ export default async function main() {
   console.log('bootstrap main()...');
   let result;
   try {
-    result = go();
+    result = await go();
   } catch (err) {
     console.log(err);
     console.log(err.message);
