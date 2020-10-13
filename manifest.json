@@ -10,6 +10,7 @@
     "./lib/*": [ "./lib/*" ]
   },
   "preload": [],
+  "strip": [],
   "$comment": [
     "cribbed from...",
     "https://github.com/Moddable-OpenSource/moddable/blob/public/modules/files/file/manifest.json",
