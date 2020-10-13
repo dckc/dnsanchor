@@ -67,6 +67,12 @@
       }
     }
   },
+  "config": {
+		"tls": {
+			"DHE_RSA": true,
+			"ECDHE_RSA": true
+		}
+	},
   "creation": {
     "keys": {
       "available": 4096
